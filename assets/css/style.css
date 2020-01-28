@@ -1,0 +1,93 @@
+*{
+    font-family: 'battle';
+}
+@font-face {
+    font-family: 'battle';
+    src: url('../fonts/prstartk.ttf');
+}
+main{
+    width: 100vw;
+    height: 100vh;
+}
+.start-page{
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    color: #fff;
+}
+.nav-button{
+    transition: 0.5s;
+    font-size: 25px;
+    position: relative;
+    padding: 1em;
+    cursor: pointer;
+}
+.active::before{
+    content: "";
+    background: url("../img/tank-home.png") center no-repeat;
+    background-size: contain;
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    left: -55px;
+    top: 1em;
+}
+#game{
+    width: 100vw;
+    height: 100vh;
+    background-color: #b4b4b4;
+}
+.gamezone{
+    width: 70%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.elements{
+    display: flex;
+    flex-wrap: wrap;
+    width: 650px;
+    position: relative;
+    background-color: #000;
+}
+
+.info{
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 20%;
+    height: 100%;
+    padding: 1em;
+    padding-top: 5em;
+    color: #fff;
+}
+
+.element{
+    position: absolute;
+}
+.brick{
+    background: url("../img/animations/blocks/brick.png") center no-repeat;
+    background-size: 100% 100%;
+}
+.stone{
+    background: url("../img/animations/blocks/stone.png") center no-repeat;
+    background-size: 100% 100%;
+}
+.water{
+    background: url("../img/animations/blocks/water.png") center no-repeat;
+    background-size: 100% 100%;
+}
+.tree{
+    background: url("../img/animations/blocks/tree.png") center no-repeat;
+    background-size: 100% 100%;
+}
+.ground{
+    background: #000;
+}
+.player{
+    background: url("../img/tank-home.png") center no-repeat;
+    background-size: 100% 100%;
+    transform: rotate(-90deg);
+}

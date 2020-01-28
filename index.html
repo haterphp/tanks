@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="stylesheet" href="assets/libs/css/bootstrap-4.0.0.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <script defer src="assets/libs/js/jquery-3.2.1.min.js"></script>
+    <script defer src="assets/libs/js/popper.min.js"></script>
+    <script defer src="assets/libs/js/bootstrap-4.0.0.js"></script>
+    <script defer src="assets/libs/js/jquery-ui.js"></script>
+
+    <script defer src="assets/js/main.js" type="module"></script>
+    <script defer src="assets/js/animation.js"></script>
+
+    <title>Battle City</title>
+</head>
+<body>
+    <main>
+        <div class="start-page justify-content-center align-items-center" style="display: none" id="start">
+            <div class="w-50 h-50 d-flex justify-content-around flex-column align-items-center">
+                <img src="assets/img/battle-logo.png" alt="battle city logo">
+                <div class="nav d-flex flex-column ">
+                    <a class="nav-button active" id="1_player" onclick="go('game')">1 player</a>
+                    <a class="nav-button" id="2_player">2 player</a>
+                </div>
+            </div>
+        </div>
+        <div id="game" style="display: block;">
+            <div class="info">
+                <p>HP: <span id="hp">3</span></p>
+                <p>Score: <span id="score">0</span></p>
+            </div>
+            <div class="gamezone">
+                <div class="elements"></div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
