@@ -6,25 +6,33 @@ import {Player} from "./modules/player.js";
 
 let app = {
     zone: $('.elements'),
-    zoneSize:{
+    zoneSize: {
         w: 0,
         h: 0
     },
     elements: [],
     game: null,
     player: null,
-    map: getMap(0),
+    mapNumber: getMap(0),
+    map: [],
     objectSize: 0,
     positionPlayer: null
 }
 
-let map = new Map().generateMap(app.map)
+let map = new Map()
+map.generateMap(app.mapNumber)
 
-app.game = new Game(app);
-app.game.loop();
-app.player = app.game.generate(Player, app.elements);
+app.game = new Game();
+setTimeout(() => {
 
-console.log(app.positionPlayer);
+    map.update();
+
+    app.positionPlayer = app.map.find(item => item.type === 5);
+    app.player = app.game.generate(Player, app.elements);
+
+    app.game.loop();
+}, 200)
+
 
 export {app};
 

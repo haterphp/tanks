@@ -87,7 +87,6 @@ main{
     background: #000;
 }
 .player{
-    background: url("../img/tank-home.png") center no-repeat;
+    background: url("../img/animations/player/state/up.png") center no-repeat;
     background-size: 100% 100%;
-    transform: rotate(-90deg);
 }

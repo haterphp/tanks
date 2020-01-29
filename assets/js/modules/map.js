@@ -23,21 +23,30 @@ export class Map{
                 break;
             case 5:
                 el = new Ground(app.objectSize);
-                app.positionPlayer = el
-                break;
+                return el;
         }
     }
 
     generateMap(map){
-
         app.objectSize = app.zone.width() / map[0].length;
         for(let array of map){
             for(let block of array){
                 let element = this.changeImage(block);
+                element.type = block;
                 if(![0,5].includes(block)){
                     app.elements.push(element);
                 }
+                app.map.push(element);
             }
+        }
+
+    }
+    update(){
+        for(let mapitem in app.map){
+            app.map[mapitem].x = app.map[mapitem].element.position().left;
+            app.map[mapitem].y = app.map[mapitem].element.position().top;
+
+            app.map[mapitem].draw();
         }
     }
 }

@@ -1,7 +1,6 @@
+import {app} from "../main.js";
+
 export class Game {
-    constructor(app){
-        this.elements = app.elements;
-    }
 
     generate(className, array , data = [], flag = false){
         if(!flag){
@@ -18,13 +17,13 @@ export class Game {
 
     loop(){
         requestAnimationFrame(()=>{
-            this.updateElements();
+            this.updateElements(app.elements);
             this.loop();
         })
     }
 
-    updateElements(){
-        this.elements.forEach(e=>{
+    updateElements(elements){
+        elements.forEach(e=>{
             e.update();
             e.draw();
         })

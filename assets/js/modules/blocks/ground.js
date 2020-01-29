@@ -4,7 +4,5 @@ export class Ground extends Block{
     constructor(size){
         super();
         this.w = this.h = size;
-        this.draw();
-        this.update();
     }
 }

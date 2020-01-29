@@ -6,8 +6,4 @@ export class Block extends Drawable{
         super();
         this.createElement(false);
     }
-    update(){
-        this.x = this.element.position().left;
-        this.y = this.element.position().top;
-    }
 }

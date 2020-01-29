@@ -40,4 +40,27 @@ export class Drawable{
         this.element.remove();
     }
 
+    changeAnimation(animation){
+        this.element.css({
+            background: `url('assets/img/animations/${animation}')`,
+            backgroundSize: '100% 100%'
+        })
+    }
+
+    isCollision(element){
+        let a = {
+            x1: this.x,
+            x2: this.x + this.w,
+            y1: this.y,
+            y2: this.y + this.h
+        }
+        let b = {
+            x1: element.x,
+            x2: element.x + element.w,
+            y1: element.y,
+            y2: element.y + element.h
+        }
+
+        return a.x1 < b.x2 && b.x1 < a.x2 && a.y1 < b.y2 && b.y1 < a.y2;
+    }
 }
