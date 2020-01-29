@@ -210,9 +210,5 @@ export class Player extends Drawable {
                 break;
         }
     }
-
-    actionSpace(value){
-        
-    }
-
+    
 }
