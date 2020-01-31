@@ -16,7 +16,9 @@ let app = {
     mapNumber: getMap(0),
     map: [],
     objectSize: 0,
-    positionPlayer: null
+    positionPlayer: null,
+    pause: false,
+    ended: false
 }
 
 let map = new Map()
@@ -31,6 +33,8 @@ setTimeout(() => {
     app.player = app.game.generate(Player, app.elements);
 
     app.game.loop();
+    app.game.keyEvents();
+
     console.log(app.elements);
 }, 200)
 

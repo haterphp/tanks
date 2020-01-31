@@ -1,6 +1,16 @@
 import {app} from "../main.js";
 
 export class Game {
+    constructor(){
+        this.pausecounter = 0;
+    }
+    keyEvents(){
+        addEventListener('keydown',e=>{
+            if (e.code === 'Escape') {
+                app.pause = !app.pause
+            }
+        })
+    }
 
     generate(className, array , data = [], flag = false){
         if(!flag){
@@ -26,8 +36,21 @@ export class Game {
 
     loop(){
         requestAnimationFrame(()=>{
-            this.updateElements(app.elements);
-            this.loop();
+            if(!app.pause) {
+                if(this.pausecounter === 0){
+                    $('.pause').fadeOut();
+                }
+                this.pausecounter++;
+                this.updateElements(app.elements);
+            }
+            else{
+                $('.pause').fadeIn();
+                this.pausecounter = 0;
+            }
+
+            if(!app.ended){
+                this.loop();
+            }
         })
     }
 
