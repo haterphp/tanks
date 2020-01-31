@@ -48,7 +48,7 @@ main{
 .elements{
     display: flex;
     flex-wrap: wrap;
-    width: 650px;
+    width: 700px;
     position: relative;
     background-color: #000;
 }
@@ -65,6 +65,9 @@ main{
 }
 
 .element{
+    position: absolute;
+}
+.block{
     position: absolute;
 }
 .brick{
@@ -89,4 +92,7 @@ main{
 .player{
     background: url("../img/animations/player/state/up.png") center no-repeat;
     background-size: 100% 100%;
+}
+.bullet{
+    background-color: #eeeeee;
 }

@@ -27,10 +27,11 @@ setTimeout(() => {
 
     map.update();
 
-    app.positionPlayer = app.map.find(item => item.type === 5);
+    app.positionPlayer = app.map.find(item => item.typeBlock === 5);
     app.player = app.game.generate(Player, app.elements);
 
     app.game.loop();
+    console.log(app.elements);
 }, 200)
 
 

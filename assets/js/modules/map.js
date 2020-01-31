@@ -32,7 +32,7 @@ export class Map{
         for(let array of map){
             for(let block of array){
                 let element = this.changeImage(block);
-                element.type = block;
+                element.typeBlock = block;
                 if(![0,5].includes(block)){
                     app.elements.push(element);
                 }

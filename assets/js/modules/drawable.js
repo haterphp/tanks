@@ -7,9 +7,40 @@ export class Drawable{
         this.w = 0;
         this.h = 0;
 
+        this.speed = 0;
+
         this.offsets = {
             x:0,
             y:0
+        }
+
+        this.type = this.constructor.name.toLowerCase();
+    }
+
+    changeDirection(value) {
+        switch (value) {
+            case 1:
+
+                this.offsets.x = this.speed;
+                this.offsets.y = 0;
+
+                break;
+            case -1:
+                this.offsets.x = -this.speed;
+                this.offsets.y = 0;
+                break;
+            case 2:
+                this.offsets.y = -this.speed;
+                this.offsets.x = 0;
+                break;
+            case -2:
+                this.offsets.y = this.speed;
+                this.offsets.x = 0;
+                break;
+            case 0:
+                this.offsets.x = 0;
+                this.offsets.y = 0;
+                break;
         }
     }
 
@@ -17,7 +48,7 @@ export class Drawable{
         if (flag){
             this.element = $(`<div class="element ${this.constructor.name.toLowerCase()}"></div>`);
         }else{
-            this.element = $(`<div class="${this.constructor.name.toLowerCase()}"></div>`);
+            this.element = $(`<div class=" ${this.constructor.name.toLowerCase()}"></div>`);
         }
         app.zone.append(this.element);
     }

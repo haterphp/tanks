@@ -15,6 +15,15 @@ export class Game {
         }
     }
 
+    remove(element, array){
+        let idx = array.indexOf(element);
+        if(idx !== -1){
+            array.splice(idx,1);
+            return true;
+        }
+        return false;
+    }
+
     loop(){
         requestAnimationFrame(()=>{
             this.updateElements(app.elements);

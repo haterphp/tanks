@@ -1,5 +1,6 @@
 import {Drawable} from "./drawable.js";
 import {app} from "../main.js";
+import {Bullet} from "../bullet.js";
 
 
 export class Player extends Drawable {
@@ -11,10 +12,9 @@ export class Player extends Drawable {
 
         this.speed = 2;
 
-        this.lastDirection = {
-            value: null,
-            flag: false
-        }
+        this.lastDirection = 2;
+
+        this.timeout = 0;
 
         this.hp = 3;
 
@@ -25,9 +25,6 @@ export class Player extends Drawable {
             .set('ArrowDown', null)
             .set('Space', null);
 
-        this.events = new Map()
-            .set('BrickCollision', null)
-
         this.direction = null;
 
         this.createElement();
@@ -35,8 +32,8 @@ export class Player extends Drawable {
     }
 
     keyEvents() {
-        document.addEventListener('keydown', (e) => this.switchKeys(e.key, 'keydown'))
-        document.addEventListener('keyup', (e) => this.switchKeys(e.key, 'keyup'))
+        document.addEventListener('keydown', (e) => this.switchKeys(e.code, 'keydown'))
+        document.addEventListener('keyup', (e) => this.switchKeys(e.code, 'keyup'))
     }
 
     switchKeys(key, status) {
@@ -46,90 +43,23 @@ export class Player extends Drawable {
     }
 
     update() {
-
         this.changeDirection(this.direction);
         this.keys.forEach((value, key) => {
             if (this[`action${key}`])
                 this[`action${key}`](value)
         })
-        this.events.forEach((value, key) => {
-            if (this[`event${key}`])
-                this[`event${key}`](value)
-        })
 
-
+        if(this.timeout !== 0){
+            this.timeout++;
+        }
+        if(this.timeout === 30){
+            this.timeout = 0;
+        }
         super.update();
     }
 
-    eventBrickCollision(brick) {
-        if (brick) {
-            if (this.isCollision(brick)) {
 
-                if (!this.lastDirection.flag) {
-                    this.lastDirection.value = this.direction
-                }
-                this.lastDirection.flag = true;
 
-                switch (this.lastDirection.value) {
-                    case 1:
-                        if (this.keys.get('ArrowRight') === 'keydown') {
-                            this.direction = 0;
-                            return;
-                        }
-                        break;
-                    case -1:
-                        if (this.keys.get('ArrowLeft') === 'keydown') {
-                            this.direction = 0;
-                            return;
-                        }
-                        break;
-                    case 2:
-                        if (this.keys.get('ArrowUp') === 'keydown') {
-                            this.direction = 0;
-                            return;
-                        }
-                        break;
-                    case -2:
-                        if (this.keys.get('ArrowDown') === 'keydown') {
-                            this.direction = 0;
-                            return;
-                        }
-                        break;
-                }
-            }
-            else{
-                this.lastDirection.flag = false;
-                this.lastDirection.value = null;
-            }
-        }
-    }
-
-    changeDirection() {
-        switch (this.direction) {
-            case 1:
-
-                this.offsets.x = this.speed;
-                this.offsets.y = 0;
-
-                break;
-            case -1:
-                this.offsets.x = -this.speed;
-                this.offsets.y = 0;
-                break;
-            case 2:
-                this.offsets.y = -this.speed
-                this.offsets.x = 0;
-                break;
-            case -2:
-                this.offsets.y = this.speed
-                this.offsets.x = 0;
-                break;
-            case 0:
-                this.offsets.x = 0;
-                this.offsets.y = 0;
-                break;
-        }
-    }
 
     actionArrowRight(value) {
         switch (value) {
@@ -137,6 +67,7 @@ export class Player extends Drawable {
                 if (this.x + this.w + this.speed <= app.zone.width()) {
                     this.direction = 1;
                     this.changeAnimation(`${this.constructor.name.toLowerCase()}/right.gif`)
+                    this.lastDirection = 1;
                 } else {
                     this.direction = 0;
                     this.keys.set('ArrowRight', null);
@@ -156,6 +87,7 @@ export class Player extends Drawable {
             case 'keydown':
                 if (this.x + this.speed >= 0) {
                     this.direction = -1;
+                    this.lastDirection = -1;
                     this.changeAnimation(`${this.constructor.name.toLowerCase()}/left.gif`)
                 } else {
                     this.direction = 0;
@@ -176,6 +108,7 @@ export class Player extends Drawable {
             case 'keydown':
                 if (this.y + this.speed >= 0) {
                     this.direction = 2;
+                    this.lastDirection = 2;
                     this.changeAnimation(`${this.constructor.name.toLowerCase()}/up.gif`)
                 } else {
                     this.direction = 0;
@@ -196,6 +129,7 @@ export class Player extends Drawable {
             case 'keydown':
                 if (this.y + this.h + this.speed <= app.zone.height()) {
                     this.direction = -2;
+                    this.lastDirection = -2;
                     this.changeAnimation(`${this.constructor.name.toLowerCase()}/down.gif`)
                 } else {
                     this.direction = 0;
@@ -210,5 +144,50 @@ export class Player extends Drawable {
                 break;
         }
     }
-    
+
+    actionSpace(value) {
+        if (value === 'keydown') {
+            if(this.timeout === 0) {
+                switch (this.lastDirection) {
+                    case 2:
+                        app.game.generate(Bullet, app.elements, {
+                            x: this.x + (this.w / 2 - 5),
+                            y: this.y - 30,
+                            direction: 2,
+                            w: 10,
+                            h: 15
+                        }, true)
+                        break;
+                    case -2:
+                        app.game.generate(Bullet, app.elements, {
+                            x: this.x + (this.w / 2 - 5),
+                            y: this.y + this.h + 10,
+                            direction: -2,
+                            w: 10,
+                            h: 15
+                        }, true)
+                        break;
+                    case -1:
+                        app.game.generate(Bullet, app.elements, {
+                            x: this.x - 30,
+                            y: (this.y + this.h / 2 - 7),
+                            direction: -1,
+                            w: 15,
+                            h: 10
+                        }, true)
+                        break;
+                    case 1:
+                        app.game.generate(Bullet, app.elements, {
+                            x: this.x + this.w + 10,
+                            y: (this.y + this.h / 2 - 5),
+                            direction: 1,
+                            w: 15,
+                            h: 10
+                        }, true)
+                        break;
+                }
+                this.timeout++;
+            }
+        }
+    }
 }
