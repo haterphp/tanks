@@ -1,6 +1,5 @@
-import {Drawable} from "./modules/drawable.js";
-import {app} from "./main.js";
-import {Ground} from "./modules/blocks/ground.js";
+import {Drawable} from "../modules/drawable.js";
+import {app} from "../main.js";
 
 export class Bullet extends Drawable {
     constructor(spawn_position) {
@@ -67,6 +66,13 @@ export class Bullet extends Drawable {
                         }
                         e.type = 'ground';
                         e.element[0].classList = 'ground';
+                    }
+                }
+                if(e.type === 'stone'){
+                    if(this.isCollision(e)){
+                        if (app.game.remove(this, app.elements)) {
+                            this.removeElement();
+                        }
                     }
                 }
             }

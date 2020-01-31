@@ -1,6 +1,6 @@
 import {Drawable} from "./drawable.js";
 import {app} from "../main.js";
-import {Bullet} from "../bullet.js";
+import {Bullet} from "./bullet.js";
 
 
 export class Player extends Drawable {

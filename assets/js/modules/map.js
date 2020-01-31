@@ -1,6 +1,9 @@
 import {Brick} from './blocks/brick.js'
 import {Ground} from './blocks/ground.js'
 import {app} from '../main.js'
+import {Stone} from "./blocks/stone.js";
+import {Water} from "./blocks/water.js";
+
 export class Map{
     changeImage(item){
         let el = [];
@@ -13,11 +16,11 @@ export class Map{
                 el = new Brick(app.objectSize);
                 return el;
             case 2:
-
-                break;
+                el = new Stone(app.objectSize);
+                return el;
             case 3:
-
-                break;
+                el = new Water(app.objectSize);
+                return el;
             case 4:
 
                 break;
