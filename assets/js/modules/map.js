@@ -27,6 +27,9 @@ export class Map{
             case 5:
                 el = new Ground(app.objectSize);
                 return el;
+            case 6:
+                el = new Ground(app.objectSize);
+                return el;
         }
     }
 
@@ -36,10 +39,9 @@ export class Map{
             for(let block of array){
                 let element = this.changeImage(block);
                 element.typeBlock = block;
-                if(![0,5].includes(block)){
+                if(![0,5,6].includes(block)){
                     app.elements.push(element);
                 }
-                console.log(element.type);
                 app.map.push(element);
             }
         }

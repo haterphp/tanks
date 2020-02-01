@@ -84,11 +84,9 @@ export class Player extends Drawable {
                     })){
                         this.direction = 1;
                         this.changeAnimation(`${this.constructor.name.toLowerCase()}/right.gif`)
-
                     }
                     else{
                         this.direction = 0;
-                        this.keys.set('ArrowRight', null);
                         this.changeAnimation(`${this.constructor.name.toLowerCase()}/state/right.png`)
                     }
                 } else {
@@ -122,7 +120,6 @@ export class Player extends Drawable {
                     }
                     else{
                         this.direction = 0;
-                        this.keys.set('ArrowLeft', null);
                         this.changeAnimation(`${this.constructor.name.toLowerCase()}/state/left.png`)
                     }
 
@@ -158,7 +155,7 @@ export class Player extends Drawable {
                     }
                     else{
                         this.direction = 0;
-                        this.keys.set('ArrowUp', null);
+
                         this.changeAnimation(`${this.constructor.name.toLowerCase()}/state/up.png`)
                     }
 
@@ -193,7 +190,7 @@ export class Player extends Drawable {
                     }
                     else{
                         this.direction = 0;
-                        this.keys.set('ArrowDown', null);
+
                         this.changeAnimation(`${this.constructor.name.toLowerCase()}/state/down.png`)
                     }
 

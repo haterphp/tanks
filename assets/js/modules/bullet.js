@@ -75,6 +75,18 @@ export class Bullet extends Drawable {
                         }
                     }
                 }
+                if(app.enemiesType.includes(e.type)){
+                    if(this.isCollision(e)){
+                        if(this.isCollision(e)){
+                            if (app.game.remove(this, app.elements)) {
+                                this.removeElement();
+                            }
+                            if(app.game.remove(e, app.elements)){
+                                e.removeElement();
+                            }
+                        }
+                    }
+                }
             }
         })
     }

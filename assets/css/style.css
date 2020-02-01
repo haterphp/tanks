@@ -97,3 +97,8 @@ main{
 .bullet{
     background-color: #eeeeee;
 }
+.enemy{
+    /*background: url("../img/animations/enemies/enemies.png") center no-repeat;*/
+    /*background-size: 100% 100%;*/
+    background-color: #c6c6c6;
+}

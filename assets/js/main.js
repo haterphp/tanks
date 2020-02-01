@@ -18,7 +18,10 @@ let app = {
     objectSize: 0,
     positionPlayer: null,
     pause: false,
-    ended: false
+    ended: false,
+    positionSpawnEnemies: [],
+    muchEnemies: 15,
+    enemiesType: ['enemy']
 }
 
 let map = new Map()
@@ -29,13 +32,15 @@ setTimeout(() => {
 
     map.update();
 
+    app.positionSpawnEnemies = app.map.filter(item => item.typeBlock === 6);
+
     app.positionPlayer = app.map.find(item => item.typeBlock === 5);
     app.player = app.game.generate(Player, app.elements);
 
     app.game.loop();
     app.game.keyEvents();
 
-    console.log(app.elements);
+    //console.log(app.elements);
 }, 200)
 
 
