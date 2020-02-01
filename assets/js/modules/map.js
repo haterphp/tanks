@@ -3,6 +3,7 @@ import {Ground} from './blocks/ground.js'
 import {app} from '../main.js'
 import {Stone} from "./blocks/stone.js";
 import {Water} from "./blocks/water.js";
+import {Tree} from "./blocks/tree.js";
 
 export class Map{
     changeImage(item){
@@ -11,7 +12,6 @@ export class Map{
             case 0:
                 el = new Ground(app.objectSize);
                 return el;
-                break;
             case 1:
                 el = new Brick(app.objectSize);
                 return el;
@@ -22,8 +22,8 @@ export class Map{
                 el = new Water(app.objectSize);
                 return el;
             case 4:
-
-                break;
+                el = new Tree(app.objectSize);
+                return el;
             case 5:
                 el = new Ground(app.objectSize);
                 return el;
@@ -39,6 +39,7 @@ export class Map{
                 if(![0,5].includes(block)){
                     app.elements.push(element);
                 }
+                console.log(element.type);
                 app.map.push(element);
             }
         }

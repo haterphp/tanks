@@ -37,9 +37,9 @@ export class Game {
     loop(){
         requestAnimationFrame(()=>{
             if(!app.pause) {
-                if(this.pausecounter === 0){
-                    $('.pause').fadeOut();
-                }
+                // if(this.pausecounter === 0){
+                //     $('.pause').fadeOut();
+                // }
                 this.pausecounter++;
                 this.updateElements(app.elements);
             }

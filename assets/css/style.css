@@ -83,8 +83,9 @@ main{
     background-size: 100% 100%;
 }
 .tree{
-    background: url("../img/animations/blocks/tree.png") center no-repeat;
-    background-size: 100% 100%;
+    background: url("../img/animations/blocks/tree.png") center ;
+    background-size: 50% 50%;
+    z-index: 1000;
 }
 .ground{
     background: #000;

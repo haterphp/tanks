@@ -6,7 +6,7 @@ import {Bullet} from "./bullet.js";
 export class Player extends Drawable {
     constructor() {
         super();
-        this.w = this.h = app.objectSize - 20;
+        this.w = this.h = app.objectSize - 12;
         this.x = app.positionPlayer.x;
         this.y = app.positionPlayer.y;
 
@@ -43,6 +43,8 @@ export class Player extends Drawable {
     }
 
     update() {
+
+
         this.changeDirection(this.direction);
         this.keys.forEach((value, key) => {
             if (this[`action${key}`])
@@ -58,16 +60,37 @@ export class Player extends Drawable {
         super.update();
     }
 
-
-
+    collisionWithBlock(newPos){
+        let collisionCheck = false;
+        app.elements.filter(item => ['stone', 'brick', 'water'].includes(item.type)).forEach(e=>{
+            if(e.isCollision(newPos)){
+                collisionCheck = true;
+                return;
+            }
+        })
+        return collisionCheck;
+    }
 
     actionArrowRight(value) {
         switch (value) {
             case 'keydown':
+                this.lastDirection = 1;
                 if (this.x + this.w + this.speed <= app.zone.width()) {
-                    this.direction = 1;
-                    this.changeAnimation(`${this.constructor.name.toLowerCase()}/right.gif`)
-                    this.lastDirection = 1;
+                    if(!this.collisionWithBlock({
+                        x: this.x + this.speed + 3,
+                        y: this.y,
+                        w: this.w,
+                        h: this.h,
+                    })){
+                        this.direction = 1;
+                        this.changeAnimation(`${this.constructor.name.toLowerCase()}/right.gif`)
+
+                    }
+                    else{
+                        this.direction = 0;
+                        this.keys.set('ArrowRight', null);
+                        this.changeAnimation(`${this.constructor.name.toLowerCase()}/state/right.png`)
+                    }
                 } else {
                     this.direction = 0;
                     this.keys.set('ArrowRight', null);
@@ -85,10 +108,24 @@ export class Player extends Drawable {
     actionArrowLeft(value) {
         switch (value) {
             case 'keydown':
+                this.lastDirection = -1;
                 if (this.x + this.speed >= 0) {
-                    this.direction = -1;
-                    this.lastDirection = -1;
-                    this.changeAnimation(`${this.constructor.name.toLowerCase()}/left.gif`)
+                    if(!this.collisionWithBlock({
+                        x: this.x - (this.speed + 3 ),
+                        y: this.y,
+                        w: this.w,
+                        h: this.h,
+                    })){
+                        this.direction = -1;
+
+                        this.changeAnimation(`${this.constructor.name.toLowerCase()}/left.gif`)
+                    }
+                    else{
+                        this.direction = 0;
+                        this.keys.set('ArrowLeft', null);
+                        this.changeAnimation(`${this.constructor.name.toLowerCase()}/state/left.png`)
+                    }
+
                 } else {
                     this.direction = 0;
                     this.keys.set('ArrowLeft', null);
@@ -106,10 +143,25 @@ export class Player extends Drawable {
     actionArrowUp(value) {
         switch (value) {
             case 'keydown':
+                this.lastDirection = 2;
                 if (this.y + this.speed >= 0) {
-                    this.direction = 2;
-                    this.lastDirection = 2;
-                    this.changeAnimation(`${this.constructor.name.toLowerCase()}/up.gif`)
+
+                    if(!this.collisionWithBlock({
+                        x: this.x,
+                        y: this.y - (this.speed + 3 ),
+                        w: this.w,
+                        h: this.h,
+                    })){
+                        this.direction = 2;
+
+                        this.changeAnimation(`${this.constructor.name.toLowerCase()}/up.gif`)
+                    }
+                    else{
+                        this.direction = 0;
+                        this.keys.set('ArrowUp', null);
+                        this.changeAnimation(`${this.constructor.name.toLowerCase()}/state/up.png`)
+                    }
+
                 } else {
                     this.direction = 0;
                     this.keys.set('ArrowUp', null);
@@ -128,9 +180,23 @@ export class Player extends Drawable {
         switch (value) {
             case 'keydown':
                 if (this.y + this.h + this.speed <= app.zone.height()) {
-                    this.direction = -2;
                     this.lastDirection = -2;
-                    this.changeAnimation(`${this.constructor.name.toLowerCase()}/down.gif`)
+                    if(!this.collisionWithBlock({
+                        x: this.x,
+                        y: this.y + this.speed + 3,
+                        w: this.w,
+                        h: this.h,
+                    })){
+                        this.direction = -2;
+
+                        this.changeAnimation(`${this.constructor.name.toLowerCase()}/down.gif`)
+                    }
+                    else{
+                        this.direction = 0;
+                        this.keys.set('ArrowDown', null);
+                        this.changeAnimation(`${this.constructor.name.toLowerCase()}/state/down.png`)
+                    }
+
                 } else {
                     this.direction = 0;
                     this.keys.set('ArrowDown', null);
