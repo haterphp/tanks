@@ -10,6 +10,8 @@ export class Player extends Drawable {
         this.x = app.positionPlayer.x;
         this.y = app.positionPlayer.y;
 
+        this.positionOnBlock = null;
+
         this.speed = 2;
 
         this.lastDirection = 2;
@@ -44,8 +46,8 @@ export class Player extends Drawable {
 
     update() {
 
-
         this.changeDirection(this.direction);
+        this.posOnBlock();
         this.keys.forEach((value, key) => {
             if (this[`action${key}`])
                 this[`action${key}`](value)
@@ -69,6 +71,14 @@ export class Player extends Drawable {
             }
         })
         return collisionCheck;
+    }
+
+    posOnBlock(){
+        app.map.filter(item => ['tree', 'ground'].includes(item.type)).forEach(e=>{
+            if(e.isCollision(this)){
+                this.positionOnBlock = e;
+            }
+        })
     }
 
     actionArrowRight(value) {

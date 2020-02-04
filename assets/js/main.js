@@ -2,7 +2,7 @@ import {Game} from './modules/game.js';
 import {Map} from "./modules/map.js";
 import {getMap} from "../storage/map.js";
 import {Player} from "./modules/player.js";
-
+import {findElement} from "./modules/helper.js";
 
 let app = {
     zone: $('.elements'),
@@ -14,13 +14,14 @@ let app = {
     game: null,
     player: null,
     mapNumber: getMap(0),
+    mapInObject: [],
     map: [],
     objectSize: 0,
     positionPlayer: null,
     pause: false,
     ended: false,
     positionSpawnEnemies: [],
-    muchEnemies: 15,
+    muchEnemies: 1,
     enemiesType: ['enemy']
 }
 
@@ -30,17 +31,22 @@ map.generateMap(app.mapNumber)
 app.game = new Game();
 setTimeout(() => {
 
-    map.update();
-
-    app.positionSpawnEnemies = app.map.filter(item => item.typeBlock === 6);
+    app.map.forEach(e=>{
+        e.x = e.element.position().left;
+        e.y = e.element.position().top;
+        e.draw();
+    });
 
     app.positionPlayer = app.map.find(item => item.typeBlock === 5);
+    app.positionSpawnEnemies = app.map.filter(item => item.typeBlock === 6);
+
     app.player = app.game.generate(Player, app.elements);
 
     app.game.loop();
     app.game.keyEvents();
 
-    //console.log(app.elements);
+
+    console.log(app.mapInObject);
 }, 200)
 
 
