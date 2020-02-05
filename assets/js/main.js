@@ -54,9 +54,8 @@ setTimeout(() => {
     app.game.graphCreate(app.map, app.graph);
 
     console.log(app.graph);
-    console.log(app.mapInObject);
+    console.log(app.graph[176]);
 }, 200)
 
 
 export {app};
-
