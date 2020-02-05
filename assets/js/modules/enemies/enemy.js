@@ -14,13 +14,53 @@ export class Enemy extends Drawable {
         this.x = app.positionSpawnEnemies[this.numberPosition].x + 2.5;
         this.y = app.positionSpawnEnemies[this.numberPosition].y + 2.5;
 
-                
+        this.time = 0;
+
+        this.visited = [];
+        this.path = [];
 
         this.createElement();
     }
 
-    update() {
+    bfs(graph, startNode = app.positionSpawnEnemies[this.numberPosition].number) {
+        let visited = [];
+        let queue = [];
+        queue.push(graph[startNode])
 
+        this.visited[startNode] = true;
+
+        while (queue.length > 0) {
+            let current = queue.pop();
+
+            current.forEach((element )=> {
+                if (!this.visited[element]) {
+
+                    queue.unshift(graph[element])
+
+                    this.visited[element] = true;
+                }
+            })
+
+        }
+        console.log(this.visited);
+    }
+
+    update() {
+        if (this.time === 0) {
+            this.bfs(app.graph)
+        }
+
+        if (this.time === 3) {
+            let point = app.player.positionOnBlock.number;
+            if (this.visited[point]) {
+                console.log(point);
+            }
+        }
+        this.time++;
+        if (this.time >= 180) {
+            this.time = 1;
+        }
+        //console.log(app.graph[app.positionSpawnEnemies[this.numberPosition].number]);
 
         super.update();
     }
