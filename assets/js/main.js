@@ -13,8 +13,10 @@ let app = {
     elements: [],
     game: null,
     player: null,
-    mapNumber: getMap(0),
+    MNumber: 0,
+    mapNumber: null,
     mapInObject: [],
+    graph: [],
     map: [],
     objectSize: 0,
     positionPlayer: null,
@@ -22,8 +24,12 @@ let app = {
     ended: false,
     positionSpawnEnemies: [],
     muchEnemies: 1,
-    enemiesType: ['enemy']
+    enemiesType: ['enemy'],
+    setMapNumber(){
+        this.mapNumber = getMap(this.MNumber)
+    }
 }
+app.setMapNumber();
 
 let map = new Map()
 map.generateMap(app.mapNumber)
@@ -45,7 +51,9 @@ setTimeout(() => {
     app.game.loop();
     app.game.keyEvents();
 
+    app.game.graphCreate(app.map, app.graph);
 
+    console.log(app.graph);
     console.log(app.mapInObject);
 }, 200)
 
