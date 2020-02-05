@@ -17,32 +17,38 @@ export class Enemy extends Drawable {
         this.time = 0;
 
         this.visited = [];
+        this.parent = [];
+        this.dist = [];
         this.path = [];
 
         this.createElement();
     }
 
     bfs(graph, startNode = app.positionSpawnEnemies[this.numberPosition].number) {
-        let visited = [];
-        let queue = [];
-        queue.push(graph[startNode])
 
+        let queue = [];
+
+        queue.push(startNode)
         this.visited[startNode] = true;
+        this.parent[startNode] = -1;
+        this.dist[startNode] = 0;
 
         while (queue.length > 0) {
-            let current = queue.pop();
 
-            current.forEach((element )=> {
-                if (!this.visited[element]) {
+            let v = queue.pop();
 
-                    queue.unshift(graph[element])
-
-                    this.visited[element] = true;
+            for(let i = 0; i < graph[v].length; ++i){
+                let to = graph[v][i];
+                if(!this.visited[to]){
+                    this.visited[to] = true;
+                    queue.push(to);
+                    this.dist[to] = this.dist[v] + 1;
+                    this.parent[to] = v;
                 }
-            })
+            }
 
         }
-        console.log(this.visited);
+        console.log(this.dist);
     }
 
     update() {
@@ -53,15 +59,19 @@ export class Enemy extends Drawable {
         if (this.time === 3) {
             let point = app.player.positionOnBlock.number;
             if (this.visited[point]) {
-                console.log(point);
+                for(let v = point; v != -1; v = this.parent[v]){
+                    this.path.push(v);
+                }
+                this.path.reverse();
+                console.log(this.path);
+                console.log(this.dist[point]);
             }
         }
         this.time++;
         if (this.time >= 180) {
             this.time = 1;
         }
-        //console.log(app.graph[app.positionSpawnEnemies[this.numberPosition].number]);
-
+        
         super.update();
     }
 }
