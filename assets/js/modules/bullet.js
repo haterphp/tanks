@@ -2,16 +2,18 @@ import {Drawable} from "../modules/drawable.js";
 import {app} from "../main.js";
 
 export class Bullet extends Drawable {
-    constructor(spawn_position) {
+    constructor(spawn_options) {
         super();
-        this.direction = spawn_position.direction;
+        this.direction = spawn_options.direction;
 
-        this.w = spawn_position.w;
-        this.h = spawn_position.h;
-        this.x = spawn_position.x;
-        this.y = spawn_position.y;
+        this.w = spawn_options.w;
+        this.h = spawn_options.h;
+        this.x = spawn_options.x;
+        this.y = spawn_options.y;
 
-        this.speed = 3;
+        this.from = spawn_options.from;
+
+        this.speed = 5;
 
         this.createElement()
     }
@@ -56,36 +58,48 @@ export class Bullet extends Drawable {
         }
     }
 
-    checkCollision(){
-        app.elements.forEach(e=>{
-            if(e.type !== 'player'){
-                if(e.type === 'brick'){
-                    if(this.isCollision(e)){
-                        if (app.game.remove(this, app.elements)) {
-                            this.removeElement();
-                        }
-                        e.type = 'ground';
-                        e.element[0].classList = 'ground';
+    checkCollision() {
+        app.elements.forEach(e => {
+
+            if (e.type === 'brick') {
+                if (this.isCollision(e)) {
+                    if (app.game.remove(this, app.elements)) {
+                        this.removeElement();
+                    }
+                    e.type = 'ground';
+                    e.element[0].classList = 'ground';
+                }
+            }
+            if (e.type === 'stone') {
+                if (this.isCollision(e)) {
+                    if (app.game.remove(this, app.elements)) {
+                        this.removeElement();
                     }
                 }
-                if(e.type === 'stone'){
-                    if(this.isCollision(e)){
-                        if (app.game.remove(this, app.elements)) {
-                            this.removeElement();
-                        }
-                    }
-                }
-                if(app.enemiesType.includes(e.type)){
-                    if(this.isCollision(e)){
-                        if(this.isCollision(e)){
+            }
+
+            if(this.from === 'player'){
+                if (app.enemiesType.includes(e.type)) {
+                    if (this.isCollision(e)) {
+                        if (this.isCollision(e)) {
                             if (app.game.remove(this, app.elements)) {
                                 this.removeElement();
                             }
                             e.health--;
                         }
                     }
+
                 }
             }
+
+            if(this.from === 'enemy'){
+                if(this.isCollision(app.player)){
+                    if(app.game.remove(this, app.elements)){
+                        this.removeElement();
+                    }
+                }
+            }
+
         })
     }
 }

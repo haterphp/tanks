@@ -1,8 +1,8 @@
 import {Drawable} from "../drawable.js";
 import {random} from "../helper.js";
 import {app} from "../../main.js";
-import {getMap} from "../../../storage/map.js";
 import {findElement} from "../helper.js ";
+import {Bullet} from "../bullet.js";
 
 export class Enemy extends Drawable {
     constructor() {
@@ -27,7 +27,8 @@ export class Enemy extends Drawable {
         this.dist = [];
         this.path = [];
         this.lastElement = null;
-
+        this.fullShottime = random(60, 180);
+        this.shottime = 0;
         this.createElement();
     }
 
@@ -73,6 +74,12 @@ export class Enemy extends Drawable {
             }
         }
         this.posOnBlock();
+        this.shot();
+        this.shottime++;
+        if(this.shottime === this.fullShottime){
+            this.shottime = 0;
+            this.fullShottime = random(60, 90);
+        }
         if (this.path.length === 0) {
             app.graph = [];
             app.game.graphCreate(app.map, app.graph);
@@ -98,6 +105,54 @@ export class Enemy extends Drawable {
             this.moving();
         }
         super.update();
+    }
+
+    shot(){
+        if(this.shottime === 0) {
+
+            switch (this.direction) {
+                case 2:
+                    app.game.generate(Bullet, app.elements, {
+                        x: this.x + (this.w / 2 - 5),
+                        y: this.y - 30,
+                        direction: 2,
+                        w: 10,
+                        h: 15,
+                        from: 'enemy'
+                    }, true)
+                    break;
+                case -2:
+                    app.game.generate(Bullet, app.elements, {
+                        x: this.x + (this.w / 2 - 5),
+                        y: this.y + this.h + 10,
+                        direction: -2,
+                        w: 10,
+                        h: 15,
+                        from: 'enemy'
+                    }, true)
+                    break;
+                case -1:
+                    app.game.generate(Bullet, app.elements, {
+                        x: this.x - 30,
+                        y: (this.y + this.h / 2 - 7),
+                        direction: -1,
+                        w: 15,
+                        h: 10,
+                        from: 'enemy'
+                    }, true)
+                    break;
+                case 1:
+                    app.game.generate(Bullet, app.elements, {
+                        x: this.x + this.w + 10,
+                        y: (this.y + this.h / 2 - 5),
+                        direction: 1,
+                        w: 15,
+                        h: 10,
+                        from: 'enemy'
+                    }, true)
+                    break;
+            }
+        }
     }
 
     checkRightCollision(block) {

@@ -228,7 +228,8 @@ export class Player extends Drawable {
                             y: this.y - 30,
                             direction: 2,
                             w: 10,
-                            h: 15
+                            h: 15,
+                            from: 'player'
                         }, true)
                         break;
                     case -2:
@@ -237,7 +238,8 @@ export class Player extends Drawable {
                             y: this.y + this.h + 10,
                             direction: -2,
                             w: 10,
-                            h: 15
+                            h: 15,
+                            from: 'player'
                         }, true)
                         break;
                     case -1:
@@ -246,7 +248,8 @@ export class Player extends Drawable {
                             y: (this.y + this.h / 2 - 7),
                             direction: -1,
                             w: 15,
-                            h: 10
+                            h: 10,
+                            from: 'player'
                         }, true)
                         break;
                     case 1:
@@ -255,7 +258,8 @@ export class Player extends Drawable {
                             y: (this.y + this.h / 2 - 5),
                             direction: 1,
                             w: 15,
-                            h: 10
+                            h: 10,
+                            from: 'player'
                         }, true)
                         break;
                 }
