@@ -1,6 +1,6 @@
 import {app} from "../main.js";
-import {Enemy} from "./enemies/enemy.js";
-import {findElement} from "./helper.js";
+import {findElement, random} from "./helper.js";
+
 
 export class Game {
     constructor() {
@@ -84,7 +84,8 @@ export class Game {
             this.spawncounter++;
             if (this.spawncounter === 1) {
                 if (this.countEnemies < app.muchEnemies) {
-                    this.generate(Enemy, app.elements);
+                    let number = random(0, app.enemiesOnLevel.length);
+                    this.generate(app.enemiesOnLevel[number], app.elements);
                     this.countEnemies++;
                 }
             }

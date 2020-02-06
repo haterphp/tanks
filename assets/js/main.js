@@ -1,6 +1,7 @@
 import {Game} from './modules/game.js';
 import {Map} from "./modules/map.js";
 import {getMap} from "../storage/map.js";
+import {getEnemiesOnLevel} from "../storage/enemies.js";
 import {Player} from "./modules/player.js";
 import {findElement} from "./modules/helper.js";
 
@@ -23,13 +24,19 @@ let app = {
     pause: false,
     ended: false,
     positionSpawnEnemies: [],
-    muchEnemies: 1,
-    enemiesType: ['enemy'],
+    muchEnemies: 10,
+    enemiesType: ['basic', 'fast', 'power', 'armor'],
+    enemiesOnLevel: null,
+    setEnemiesOnLevel(){
+        this.enemiesOnLevel = getEnemiesOnLevel(this.MNumber);
+    },
     setMapNumber(){
-        this.mapNumber = getMap(this.MNumber)
+        this.mapNumber = getMap(this.MNumber);
     }
 }
+
 app.setMapNumber();
+app.setEnemiesOnLevel();
 
 let map = new Map()
 map.generateMap(app.mapNumber)
@@ -55,6 +62,7 @@ setTimeout(() => {
 
     console.log(app.graph);
     console.log(app.graph[176]);
+
 }, 200)
 
 

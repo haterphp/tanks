@@ -9,19 +9,16 @@ export class Enemy extends Drawable {
         super();
 
         this.w = this.h = app.objectSize - 12;
-        if(app.positionSpawnEnemies.length > 1){
-          this.numberPosition = random(0, 2);
-        }
-        else{
-          this.numberPosition = 0;
-        }
+
+        this.numberPosition = random(0, app.positionSpawnEnemies.length);
+
         this.x = app.positionSpawnEnemies[this.numberPosition].x + 2.5;
         this.y = app.positionSpawnEnemies[this.numberPosition].y + 2.5;
 
         this.positionOnBlock = app.positionSpawnEnemies[this.numberPosition].number;
 
         this.direction = 0;
-        this.speed = 1;
+        this.speed = 0;
 
         this.time = 0;
 
@@ -34,12 +31,12 @@ export class Enemy extends Drawable {
         this.createElement();
     }
 
-    posOnBlock(){
-      app.map.filter(item => ['tree', 'ground'].includes(item.type)).forEach(e=>{
-        if(e.isCollision(this)){
-          this.positionOnBlock = e.number;
-        }
-      })
+    posOnBlock() {
+        app.map.filter(item => ['tree', 'ground'].includes(item.type)).forEach(e => {
+            if (e.isCollision(this)) {
+                this.positionOnBlock = e.number;
+            }
+        })
     }
 
     bfs(graph, startNode) {
@@ -57,9 +54,9 @@ export class Enemy extends Drawable {
 
             let v = queue.pop();
 
-            for(let i = 0; i < graph[v].length; ++i){
+            for (let i = 0; i < graph[v].length; ++i) {
                 let to = graph[v][i];
-                if(!this.visited[to]){
+                if (!this.visited[to]) {
                     this.visited[to] = true;
                     queue.push(to);
                     this.dist[to] = this.dist[v] + 1;
@@ -70,76 +67,88 @@ export class Enemy extends Drawable {
     }
 
     update() {
-        this.posOnBlock();
-
-        if(this.path.length === 0){
-          this.bfs(app.graph, this.positionOnBlock);
-          let point = app.player.positionOnBlock.number;
-
-          if (this.visited[point]) {
-            this.path = [];
-
-            for(let v = point; v != -1; v = this.parent[v]){
-                this.path.push(v);
+        if(this.health <= 0){
+            if (app.game.remove(this, app.elements)) {
+                this.removeElement();
             }
+        }
+        this.posOnBlock();
+        if (this.path.length === 0) {
+            app.graph = [];
+            app.game.graphCreate(app.map, app.graph);
+            this.bfs(app.graph, this.positionOnBlock);
+            let point = app.player.positionOnBlock.number;
 
-            this.path.reverse();
-            this.lastElement = this.path.shift()
+            if (this.visited[point]) {
+                this.path = [];
 
-            console.log(this.path);
-          }
+                for (let v = point; v != -1; v = this.parent[v]) {
+                    this.path.push(v);
+                }
+
+                this.path.reverse();
+                this.lastElement = this.path.shift()
+
+            }
 
         }
 
         this.changeDirection(this.direction);
-        if(this.path.length !== 0){
-          this.moving();
+        if (this.path.length !== 0) {
+            this.moving();
         }
         super.update();
     }
 
-    checkRightCollision(block){
-      return this.isCollision(block) && this.x + this.w + this.speed + 3 >= block.x + block.w;
+    checkRightCollision(block) {
+        return this.isCollision(block) && this.x + this.w + this.speed + 3 >= block.x + block.w;
     }
-    checkLeftCollision(block){
-      return this.isCollision(block) && this.x - this.speed - 3 <= block.x;
+
+    checkLeftCollision(block) {
+        return this.isCollision(block) && this.x - this.speed - 3 <= block.x;
     }
-    checkUpCollision(block){
-      return this.isCollision(block) && this.y - this.speed - 3 <= block.y;
+
+    checkUpCollision(block) {
+        return this.isCollision(block) && this.y - this.speed - 3 <= block.y;
     }
-    checkDownCollision(block){
-      return this.isCollision(block) && this.y + this.h + this.speed + 3 >= block.y + block.h;
+
+    checkDownCollision(block) {
+        return this.isCollision(block) && this.y + this.h + this.speed + 3 >= block.y + block.h;
     }
-    moving(){
-      console.log(this.lastElement);
-      switch(this.path[0] - this.lastElement){
-        case 1:
-          this.direction = 1;
-          if(this.checkRightCollision(findElement(app.map, {value: this.path[0], key: 'number'}))){
-            this.direction = 0;
-            this.lastElement = this.path.shift();
-          }
-          break;
-        case -1:
-          this.direction = -1;
-          if(this.checkLeftCollision(findElement(app.map, {value: this.path[0], key: 'number'}))){
-            this.direction = 0;
-            this.lastElement = this.path.shift();
-          }
-          break;
-        case app.mapNumber.length:
-          this.direction = -2;
-          if(this.checkDownCollision(findElement(app.map, {value: this.path[0], key: 'number'}))){
-            this.direction = 0;
-            this.lastElement = this.path.shift();
-          }
-          break;
-        case -app.mapNumber.length:
-          this.direction = 2;
-          if(this.checkUpCollision(findElement(app.map, {value: this.path[0], key: 'number'}))){
-            this.direction = 0;
-            this.lastElement = this.path.shift();
-          }
-      }
+
+    moving() {
+        switch (this.path[0] - this.lastElement) {
+            case 1:
+                this.direction = 1;
+                this.changeAnimation(`enemies/${this.type}/right.gif`);
+                if (this.checkRightCollision(findElement(app.map, {value: this.path[0], key: 'number'}))) {
+                    this.direction = 0;
+                    this.lastElement = this.path.shift();
+                }
+                break;
+            case -1:
+                this.direction = -1;
+                this.changeAnimation(`enemies/${this.type}/left.gif`);
+                if (this.checkLeftCollision(findElement(app.map, {value: this.path[0], key: 'number'}))) {
+                    this.direction = 0;
+                    this.lastElement = this.path.shift();
+                }
+                break;
+            case app.mapNumber.length:
+                this.direction = -2;
+                this.changeAnimation(`enemies/${this.type}/down.gif`);
+                if (this.checkDownCollision(findElement(app.map, {value: this.path[0], key: 'number'}))) {
+                    this.direction = 0;
+                    this.lastElement = this.path.shift();
+                }
+                break;
+            case -app.mapNumber.length:
+                this.direction = 2;
+                this.changeAnimation(`enemies/${this.type}/up.gif`);
+                if (this.checkUpCollision(findElement(app.map, {value: this.path[0], key: 'number'}))) {
+                    this.direction = 0;
+                    this.lastElement = this.path.shift();
+                }
+        }
     }
 }

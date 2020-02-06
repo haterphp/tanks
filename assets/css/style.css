@@ -97,8 +97,8 @@ main{
 .bullet{
     background-color: #eeeeee;
 }
-.enemy{
-    background: url("../img/animations/enemies/default.png") center no-repeat;
+.basic{
+    background: url("../img/animations/enemies/basic/right.gif") center no-repeat;
     background-size: 100% 100%;
 
 }
