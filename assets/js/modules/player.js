@@ -18,7 +18,8 @@ export class Player extends Drawable {
 
         this.timeout = 0;
 
-        this.hp = 3;
+        this.health = 3;
+        this.godMood = false;
 
         this.keys = new Map()
             .set('ArrowRight', null)
@@ -46,6 +47,11 @@ export class Player extends Drawable {
 
     update() {
 
+
+        if (this.health === 0) {
+            app.game.end()
+        }
+
         this.changeDirection(this.direction);
         this.posOnBlock();
         this.keys.forEach((value, key) => {
@@ -53,19 +59,19 @@ export class Player extends Drawable {
                 this[`action${key}`](value)
         })
 
-        if(this.timeout !== 0){
+        if (this.timeout !== 0) {
             this.timeout++;
         }
-        if(this.timeout === 30){
+        if (this.timeout === 30) {
             this.timeout = 0;
         }
         super.update();
     }
 
-    collisionWithBlock(newPos){
+    collisionWithBlock(newPos) {
         let collisionCheck = false;
-        app.elements.filter(item => ['stone', 'brick', 'water'].includes(item.type)).forEach(e=>{
-            if(e.isCollision(newPos)){
+        app.elements.filter(item => ['stone', 'brick', 'water'].includes(item.type)).forEach(e => {
+            if (e.isCollision(newPos)) {
                 collisionCheck = true;
                 return;
             }
@@ -73,9 +79,9 @@ export class Player extends Drawable {
         return collisionCheck;
     }
 
-    posOnBlock(){
-        app.map.filter(item => ['tree', 'ground'].includes(item.type)).forEach(e=>{
-            if(e.isCollision(this)){
+    posOnBlock() {
+        app.map.filter(item => ['tree', 'ground'].includes(item.type)).forEach(e => {
+            if (e.isCollision(this)) {
                 this.positionOnBlock = e;
             }
         })
@@ -86,16 +92,15 @@ export class Player extends Drawable {
             case 'keydown':
                 this.lastDirection = 1;
                 if (this.x + this.w + this.speed <= app.zone.width()) {
-                    if(!this.collisionWithBlock({
+                    if (!this.collisionWithBlock({
                         x: this.x + this.speed + 3,
                         y: this.y,
                         w: this.w,
                         h: this.h,
-                    })){
+                    })) {
                         this.direction = 1;
                         this.changeAnimation(`${this.constructor.name.toLowerCase()}/right.gif`)
-                    }
-                    else{
+                    } else {
                         this.direction = 0;
                         this.changeAnimation(`${this.constructor.name.toLowerCase()}/state/right.png`)
                     }
@@ -118,17 +123,16 @@ export class Player extends Drawable {
             case 'keydown':
                 this.lastDirection = -1;
                 if (this.x + this.speed >= 0) {
-                    if(!this.collisionWithBlock({
-                        x: this.x - (this.speed + 3 ),
+                    if (!this.collisionWithBlock({
+                        x: this.x - (this.speed + 3),
                         y: this.y,
                         w: this.w,
                         h: this.h,
-                    })){
+                    })) {
                         this.direction = -1;
 
                         this.changeAnimation(`${this.constructor.name.toLowerCase()}/left.gif`)
-                    }
-                    else{
+                    } else {
                         this.direction = 0;
                         this.changeAnimation(`${this.constructor.name.toLowerCase()}/state/left.png`)
                     }
@@ -153,17 +157,16 @@ export class Player extends Drawable {
                 this.lastDirection = 2;
                 if (this.y + this.speed >= 0) {
 
-                    if(!this.collisionWithBlock({
+                    if (!this.collisionWithBlock({
                         x: this.x,
-                        y: this.y - (this.speed + 3 ),
+                        y: this.y - (this.speed + 3),
                         w: this.w,
                         h: this.h,
-                    })){
+                    })) {
                         this.direction = 2;
 
                         this.changeAnimation(`${this.constructor.name.toLowerCase()}/up.gif`)
-                    }
-                    else{
+                    } else {
                         this.direction = 0;
 
                         this.changeAnimation(`${this.constructor.name.toLowerCase()}/state/up.png`)
@@ -188,17 +191,16 @@ export class Player extends Drawable {
             case 'keydown':
                 if (this.y + this.h + this.speed <= app.zone.height()) {
                     this.lastDirection = -2;
-                    if(!this.collisionWithBlock({
+                    if (!this.collisionWithBlock({
                         x: this.x,
                         y: this.y + this.speed + 3,
                         w: this.w,
                         h: this.h,
-                    })){
+                    })) {
                         this.direction = -2;
 
                         this.changeAnimation(`${this.constructor.name.toLowerCase()}/down.gif`)
-                    }
-                    else{
+                    } else {
                         this.direction = 0;
 
                         this.changeAnimation(`${this.constructor.name.toLowerCase()}/state/down.png`)
@@ -220,7 +222,7 @@ export class Player extends Drawable {
 
     actionSpace(value) {
         if (value === 'keydown') {
-            if(this.timeout === 0) {
+            if (this.timeout === 0) {
                 switch (this.lastDirection) {
                     case 2:
                         app.game.generate(Bullet, app.elements, {

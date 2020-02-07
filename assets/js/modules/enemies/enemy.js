@@ -74,30 +74,16 @@ export class Enemy extends Drawable {
             }
         }
         this.posOnBlock();
+
         this.shot();
         this.shottime++;
         if(this.shottime === this.fullShottime){
             this.shottime = 0;
             this.fullShottime = random(60, 90);
         }
+
         if (this.path.length === 0) {
-            app.graph = [];
-            app.game.graphCreate(app.map, app.graph);
-            this.bfs(app.graph, this.positionOnBlock);
-            let point = app.player.positionOnBlock.number;
-
-            if (this.visited[point]) {
-                this.path = [];
-
-                for (let v = point; v != -1; v = this.parent[v]) {
-                    this.path.push(v);
-                }
-
-                this.path.reverse();
-                this.lastElement = this.path.shift()
-
-            }
-
+            this.calculatedPath(this.positionOnBlock, app.noCollisionBlocks[random(0, app.noCollisionBlocks.length)].number);
         }
 
         this.changeDirection(this.direction);
@@ -105,6 +91,25 @@ export class Enemy extends Drawable {
             this.moving();
         }
         super.update();
+    }
+
+    calculatedPath(startPoint, endPoint){
+        app.graph = [];
+        app.game.graphCreate(app.map, app.graph);
+        this.bfs(app.graph, startPoint);
+
+        if (this.visited[endPoint]) {
+            this.path = [];
+
+            for (let v = endPoint; v != -1; v = this.parent[v]) {
+                this.path.push(v);
+            }
+
+            this.path.reverse();
+            this.lastElement = this.path.shift()
+
+        }
+        this.time++;
     }
 
     shot(){

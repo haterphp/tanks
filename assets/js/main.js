@@ -17,12 +17,13 @@ let app = {
     MNumber: 0,
     mapNumber: null,
     mapInObject: [],
+    score: 0,
+    noCollisionBlocks: [],
     graph: [],
     map: [],
     objectSize: 0,
     positionPlayer: null,
     pause: false,
-    ended: false,
     positionSpawnEnemies: [],
     muchEnemies: 10,
     enemiesType: ['basic', 'fast', 'power', 'armor'],
@@ -55,10 +56,15 @@ setTimeout(() => {
 
     app.player = app.game.generate(Player, app.elements);
 
+    app.game.graphCreate(app.map, app.graph);
+
+    app.map.filter(item => ['tree', 'ground'].includes(item.type)).forEach((e)=>{
+        app.noCollisionBlocks.push(e);
+    })
+
     app.game.loop();
     app.game.keyEvents();
 
-    app.game.graphCreate(app.map, app.graph);
 
     console.log(app.graph);
     console.log(app.graph[176]);

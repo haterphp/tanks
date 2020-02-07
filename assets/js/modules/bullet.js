@@ -78,25 +78,31 @@ export class Bullet extends Drawable {
                 }
             }
 
-            if(this.from === 'player'){
+            if (this.from === 'player') {
                 if (app.enemiesType.includes(e.type)) {
                     if (this.isCollision(e)) {
                         if (this.isCollision(e)) {
                             if (app.game.remove(this, app.elements)) {
                                 this.removeElement();
+                                e.health--;
+                                app.score += e.scoreMuch;
                             }
-                            e.health--;
                         }
                     }
 
                 }
             }
 
-            if(this.from === 'enemy'){
-                if(this.isCollision(app.player)){
-                    if(app.game.remove(this, app.elements)){
+            if (this.from === 'enemy') {
+
+                if (this.isCollision(app.player)) {
+                    if (app.game.remove(this, app.elements)) {
                         this.removeElement();
+                        if (!app.player.godMood) {
+                            app.player.health--;
+                        }
                     }
+
                 }
             }
 
